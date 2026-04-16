@@ -1,17 +1,47 @@
-```gitignore
-# PowerShell build artifacts
+```
+# Build artifacts
 build/
+dist/
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.obj
+*.o
+*.out
+
 # Dependencies
 node_modules/
-# Logs and temp files
-*.log
-*.tmp
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+target/
+.gradle/
+
+# Editor/IDE files
+.vscode/
+.idea/
 *.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
 # Environment
 .env
 .env.local
-.env.*
-# Editors
-.vscode/
-.idea/
+*.env.*
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# System files
+.DS_Store
+Thumbs.db
 ```

@@ -1,111 +1,103 @@
-# Setup Tauri + Vue + React + TypeScript para Steam Mods Downloader
-# Executar no PowerShell dentro do VSCode
+# Setup Tauri + Vue + TypeScript para Steam Mods Downloader
+# Otimizado para máquinas fracas - usuário deve colocar sua própria pasta steamcmd com steamcmd.exe
 
 param(
     [string]$ProjectName = "steam-mods-downloader"
 )
 
-Write-Host "=== Setup Tauri Steam Mods Downloader ===" -ForegroundColor Cyan
+Write-Host "=== Iniciando Setup do Projeto Tauri ===" -ForegroundColor Cyan
 
-# Verificar se Node.js está instalado
-if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-    Write-Host "Erro: Node.js não está instalado. Instale em https://nodejs.org/" -ForegroundColor Red
+# 1. Criar projeto Vite com Vue + TypeScript
+Write-Host "Criando projeto Vite com Vue e TypeScript..." -ForegroundColor Yellow
+npm create vite@latest $ProjectName -- --template vue-ts
+
+if (-not (Test-Path $ProjectName)) {
+    Write-Host "Erro: Falha ao criar projeto Vite." -ForegroundColor Red
     exit 1
 }
 
-# Verificar se Rust está instalado
-if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
-    Write-Host "Erro: Rust não está instalado. Instale em https://rustup.rs/" -ForegroundColor Red
-    exit 1
-}
+Set-Location $ProjectName
 
-# Criar diretório do projeto
-$projectPath = Join-Path $PWD $ProjectName
-if (Test-Path $projectPath) {
-    Write-Host "Diretório já existe: $projectPath" -ForegroundColor Yellow
-} else {
-    New-Item -ItemType Directory -Path $projectPath | Out-Null
-}
-
-Set-Location $projectPath
-
-# Inicializar projeto Tauri com Vite + React + TypeScript
-Write-Host "`n=== Criando projeto Tauri + Vite + React + TypeScript ===" -ForegroundColor Cyan
-npm create tauri-app@latest . -- --template react-ts --manager npm --yes
-
-# Instalar dependências
-Write-Host "`n=== Instalando dependências ===" -ForegroundColor Cyan
+# 2. Instalar dependências do frontend
+Write-Host "Instalando dependências do frontend..." -ForegroundColor Yellow
 npm install
 
-# Criar estrutura de pastas
-Write-Host "`n=== Criando estrutura de pastas ===" -ForegroundColor Cyan
+# 3. Adicionar Tauri
+Write-Host "Adicionando Tauri..." -ForegroundColor Yellow
+npm install -D @tauri-apps/cli @tauri-apps/api
 
-# Pasta steamcmd
-$steamcmdPath = Join-Path $projectPath "steamcmd"
-if (-not (Test-Path $steamcmdPath)) {
-    New-Item -ItemType Directory -Path $steamcmdPath | Out-Null
-}
+# 4. Inicializar Tauri
+Write-Host "Inicializando configuração do Tauri..." -ForegroundColor Yellow
+npx tauri init --name "SteamModsDownloader" --identifier "com.steammods.downloader" --dev-path "http://localhost:5173" --dist-dir "../dist" --before-dev-command "npm run dev" --before-build-command "npm run build"
 
-# Script steam.cmd
-$steamCmdScript = @"
-@echo off
-echo ========================================
-echo STEAMCMD - Anonymous Login
-echo ========================================
-echo.
-echo Iniciando login anonymous...
-echo.
-steamcmd.exe +login anonymous +quit
-echo.
-echo Login concluido. Aguardando comandos...
-echo.
-echo Comando para download: workshop_download_item <app_id> <publishedfileid>
-echo Exemplo: workshop_download_item 730 123456789
-echo.
-pause
-"@
-$steamCmdScript | Out-File -FilePath (Join-Path $steamcmdPath "steam.cmd") -Encoding UTF8
+# 5. Configurar otimizações Rust para máquinas fracas
+Write-Host "Aplicando otimizações Rust para máquinas fracas..." -ForegroundColor Yellow
 
-# Pasta assets
-$assetsPath = Join-Path $projectPath "src-tauri" "icons"
-if (-not (Test-Path $assetsPath)) {
-    New-Item -ItemType Directory -Path $assetsPath | Out-Null
-}
+$CargoTomlPath = "src-tauri/Cargo.toml"
+$CargoContent = Get-Content $CargoTomlPath -Raw
 
-# Criar ícone placeholder (PNG vazio 1x1 pixel)
-$placeholderIcon = [System.Drawing.Bitmap]::new(1, 1)
-$placeholderIcon.Save((Join-Path $assetsPath "icon.png"))
-$placeholderIcon.Dispose()
-
-# Criar arquivo de configuração otimizado para máquinas fracas
-$tomlPath = Join-Path $projectPath "src-tauri" "Cargo.toml"
-if (Test-Path $tomlPath) {
-    $content = Get-Content $tomlPath -Raw
-    # Adicionar otimizações de release
-    if ($content -notmatch '\[profile\.release\]') {
-        $optimizedProfile = @"
+if ($CargoContent -notmatch '\[profile\.release\]') {
+    $OptimizedProfile = @"
 
 [profile.release]
-lto = true
+panic = "abort"
 codegen-units = 1
+lto = true
 opt-level = "z"
 strip = true
-panic = "abort"
 
-[profile.dev]
-opt-level = 0
-debug = false
-strip = "debuginfo"
 "@
-        $content += $optimizedProfile
-        $content | Out-File -FilePath $tomlPath -Encoding UTF8
-    }
+    $CargoContent += $OptimizedProfile
+    Set-Content -Path $CargoTomlPath -Value $CargoContent
+    Write-Host "Perfil de release otimizado adicionado." -ForegroundColor Green
 }
 
-Write-Host "`n=== Setup concluído! ===" -ForegroundColor Green
-Write-Host "Projeto criado em: $projectPath" -ForegroundColor Green
-Write-Host "`nPróximos passos:" -ForegroundColor Yellow
-Write-Host "1. Execute 'npm run tauri dev' para desenvolvimento" -ForegroundColor White
-Write-Host "2. Execute 'npm run tauri build' para compilar" -ForegroundColor White
-Write-Host "3. A pasta 'steamcmd' contém o script steam.cmd" -ForegroundColor White
-Write-Host "4. O ícone está em 'src-tauri/icons/icon.png'" -ForegroundColor White
+# 6. Criar estrutura de pastas steamcmd e assets
+Write-Host "Criando estrutura de pastas..." -ForegroundColor Yellow
+
+$SteamCmdPath = "src-tauri/steamcmd"
+$AssetsPath = "src-tauri/assets"
+$IconsPath = "src-tauri/assets/icons"
+
+if (-not (Test-Path $SteamCmdPath)) {
+    New-Item -ItemType Directory -Path $SteamCmdPath | Out-Null
+    Write-Host "Pasta steamcmd criada em: $SteamCmdPath" -ForegroundColor Green
+    Write-Host ">>> COLOQUE SUA PASTA steamcmd (COM steamcmd.exe) DENTRO DESTA PASTA <<<" -ForegroundColor Magenta
+}
+
+if (-not (Test-Path $AssetsPath)) {
+    New-Item -ItemType Directory -Path $AssetsPath | Out-Null
+}
+
+if (-not (Test-Path $IconsPath)) {
+    New-Item -ItemType Directory -Path $IconsPath | Out-Null
+}
+
+# Criar placeholder para o ícone
+$IconPlaceholder = "src-tauri/assets/icons/icon.png"
+if (-not (Test-Path $IconPlaceholder)) {
+    "# Placeholder para icon.png - Substitua por seu arquivo PNG 512x512 ou 256x256" | Out-File -FilePath $IconPlaceholder
+    Write-Host "Placeholder para ícone criado em: $IconPlaceholder" -ForegroundColor Yellow
+    Write-Host ">>> SUBSTITUA ESTE ARQUIVO PELO SEU icon.png <<<" -ForegroundColor Magenta
+}
+
+# 7. Atualizar tauri.conf.json para usar o ícone customizado
+Write-Host "Configurando tauri.conf.json..." -ForegroundColor Yellow
+
+$TauriConfPath = "src-tauri/tauri.conf.json"
+if (Test-Path $TauriConfPath) {
+    $TauriConf = Get-Content $TauriConfPath -Raw | ConvertFrom-Json
+    $TauriConf.bundle.icon = @("assets/icons/icon.png")
+    $TauriConf | ConvertTo-Json -Depth 100 | Set-Content $TauriConfPath
+    Write-Host "tauri.conf.json atualizado." -ForegroundColor Green
+}
+
+Write-Host ""
+Write-Host "=== Setup Concluído ===" -ForegroundColor Green
+Write-Host ""
+Write-Host "Próximos passos:" -ForegroundColor Cyan
+Write-Host "1. Coloque sua pasta steamcmd (contendo steamcmd.exe) em: .\$ProjectName\src-tauri\steamcmd\"
+Write-Host "2. Substitua o placeholder em: .\$ProjectName\src-tauri\assets\icons\icon.png pelo seu ícone"
+Write-Host "3. Execute 'npm run tauri dev' para testar"
+Write-Host "4. Execute '.\build.ps1' para gerar o instalador NSIS"
+Write-Host ""
