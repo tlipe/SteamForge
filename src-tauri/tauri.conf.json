@@ -1,0 +1,86 @@
+{
+    "build":  {
+                  "beforeBuildCommand":  "npm run build",
+                  "beforeDevCommand":  "npm run dev",
+                  "devPath":  "http://localhost:1420",
+                  "distDir":  "../dist",
+                  "withGlobalTauri":  true
+              },
+    "package":  {
+                    "productName":  "Steam Forge",
+                    "version":  "1.0.0"
+                },
+    "tauri":  {
+                  "allowlist":  {
+                                    "all":  false,
+                                    "shell":  {
+                                                  "all":  false,
+                                                  "execute":  true,
+                                                  "open":  true,
+                                                  "sidecar":  true
+                                              },
+                                    "fs":  {
+                                               "all":  true
+                                           },
+                                    "process":  {
+                                                    "all":  true
+                                                }
+                                },
+                  "bundle":  {
+                                 "active":  true,
+                                 "category":  "Utility",
+                                 "copyright":  "",
+                                 "deb":  {
+                                             "depends":  [
+
+                                                         ]
+                                         },
+                                 "externalBin":  [
+
+                                                 ],
+                                 "icon":  [
+                                              "icons/32x32.png",
+                                              "icons/128x128.png",
+                                              "icons/128x128@2x.png",
+                                              "icons/icon.ico",
+                                              "icons/icon.png",
+                                              "icons/Square310x310Logo.png"
+                                          ],
+                                 "identifier":  "com.steamforge.app",
+                                 "longDescription":  "",
+                                 "macOS":  {
+                                               "entitlements":  null,
+                                               "exceptionDomain":  "",
+                                               "frameworks":  [
+
+                                                              ]
+                                           },
+                                 "resources":  [
+                                                   "../steamcmd/**/*"
+                                               ],
+                                 "shortDescription":  "",
+                                 "targets":  "all",
+                                 "windows":  {
+                                                 "certificateThumbprint":  null,
+                                                 "digestAlgorithm":  "sha256",
+                                                 "nsis":  {
+                                                              "installMode":  "perMachine"
+                                                          }
+                                             }
+                             },
+                  "security":  {
+                                   "csp":  null
+                               },
+                  "windows":  [
+                                  {
+                                      "fullscreen":  false,
+                                      "height":  780,
+                                      "resizable":  true,
+                                      "title":  "Steam Forge",
+                                      "width":  950,
+                                      "transparent":  true,
+                                      "decorations":  true
+                                  }
+                              ]
+              }
+}

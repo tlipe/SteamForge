@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist_release/
+build/
+target/
+src-tauri/target/
+steamcmd/
+.env
+.DS_Store
+package-lock.jsonnode_modules

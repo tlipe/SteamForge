@@ -1,0 +1,114 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --primary: #00a2ff;
+  --primary-glow: rgba(0, 162, 255, 0.1);
+  --bg-dark: #050608;
+  --card-bg: rgba(13, 17, 23, 0.9);
+  --border: rgba(255, 255, 255, 0.06);
+  --text-main: #f0f6fc;
+  --text-dim: #8b949e;
+  --grid: rgba(0, 162, 255, 0.02);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(circle at 50% 50%, rgba(0, 162, 255, 0.04) 0%, transparent 70%), linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  color: var(--text-main); font-family: 'Inter', sans-serif;
+  height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+
+#root { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+.container {
+  background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: 16px;
+  width: 95%; max-width: 900px; height: 92vh;
+  padding: 30px; display: flex; flex-direction: column; gap: 20px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7); animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+
+.header-row {
+  display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px;
+}
+
+.title { font-size: 1.6rem; font-weight: 800; letter-spacing: 6px; color: #fff; text-transform: uppercase; }
+
+.folder-btn {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  display: flex !important; align-items: center !important; gap: 10px !important;
+  cursor: pointer !important; transition: all 0.3s ease !important;
+  width: auto !important; margin: 0 !important;
+}
+
+.folder-btn:hover {
+  background: rgba(0, 162, 255, 0.1) !important;
+  border-color: var(--primary) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 162, 255, 0.1) !important;
+}
+
+.folder-icon { font-size: 1.1rem; }
+.folder-text { font-size: 0.65rem; font-weight: 800; letter-spacing: 1px; color: var(--text-dim); }
+.folder-btn:hover .folder-text { color: var(--primary); }
+
+.input-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; }
+
+input, textarea {
+  background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px; color: #fff; padding: 14px; font-size: 0.95rem; width: 100%; transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+textarea { height: 130px; resize: none; font-family: 'JetBrains Mono', monospace; }
+
+.main-btn {
+  background: #fff; color: #000; border: none; padding: 16px; border-radius: 10px;
+  font-size: 1rem; font-weight: 800; cursor: pointer; letter-spacing: 1px;
+  text-transform: uppercase; width: 100%; transition: all 0.2s ease; margin-top: 5px;
+}
+
+.main-btn:hover:not(:disabled) { background: var(--primary); color: #fff; box-shadow: 0 8px 20px rgba(0, 162, 255, 0.3); transform: translateY(-2px); }
+.main-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+
+.queue-badge {
+  background: var(--primary-glow); color: var(--primary); padding: 10px;
+  border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center;
+  border: 1px solid rgba(0, 162, 255, 0.15); width: 100%;
+}
+
+.console-log {
+  background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px; padding: 20px; flex-grow: 1; width: 100%;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-dim);
+  display: flex; flex-direction: column; gap: 6px; overflow-y: auto;
+}
+
+.log-line { white-space: pre-wrap; word-break: break-all; opacity: 0.8; }
+.status { text-align: center; font-size: 0.9rem; font-weight: 600; color: var(--primary); }
+
+.console-log::-webkit-scrollbar { width: 6px; }
+.console-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.folder-img-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Deixa o ícone branco para combinar com o tema */
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.folder-btn:hover .folder-img-icon {
+  filter: none; /* Se o ícone for colorido, ele volta à cor original no hover */
+  opacity: 1;
+  transform: scale(1.1);
+}
