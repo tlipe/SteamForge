@@ -1,5 +1,4 @@
-﻿# Steam Forge - Build Master Script (Versão Ultra-Resiliente)
-param (
+﻿param (
     [bool]$GenerateEXE = $true,
     [bool]$GenerateNSIS = $false,
     [bool]$CreateZip = $true
@@ -7,21 +6,17 @@ param (
 
 Write-Host "--- Steam Forge Build System ---" -ForegroundColor Cyan
 
-# 1. Limpeza
 $ProjectRoot = Get-Location
 $ReleaseFolder = "$ProjectRoot\dist_release"
 if (Test-Path $ReleaseFolder) { Remove-Item $ReleaseFolder -Recurse -Force }
 New-Item -ItemType Directory -Path $ReleaseFolder | Out-Null
 
-# 2. Build Frontend e Tauri
 Write-Host "[1/2] Compilando Software (Aguarde...)" -ForegroundColor Yellow
 npm run tauri build
 
-# 3. Organização
 Write-Host "[2/2] Organizando pacotes..." -ForegroundColor Yellow
 $TauriReleasePath = "$ProjectRoot\src-tauri\target\release"
 
-# Busca o EXE independente do nome (steam-forge ou steam_forge)
 $FoundExe = Get-ChildItem "$TauriReleasePath\*.exe" | Where-Object { $_.Name -notlike "*.pdb" -and $_.Name -notlike "*setup*" } | Select-Object -First 1
 
 if ($GenerateEXE) {
