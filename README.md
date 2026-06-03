@@ -1,7 +1,3 @@
-Here’s the continuation of your **README** with the finalized project name **Steam Forge**. I’ve kept it professional, explanatory, and formal, while adding interactive effects like collapsible sections, badges, and buttons.
-
----
-
 # Steam Forge
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/tlipe/steamforge/actions)
