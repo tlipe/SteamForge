@@ -43,7 +43,7 @@
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/yourusername/steamforge.git
+   git clone https://github.com/tlipe/steamforge.git
    ```
 
 2. Navigate to the project directory:  
