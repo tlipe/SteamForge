@@ -1,7 +1,7 @@
 # Steam Forge
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/tlipe/steamforge/actions)
-[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/tlipe/steamforge/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MPL-blue)](https://github.com/tlipe/steamforge/blob/main/LICENSE)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange)](https://www.rust-lang.org/)
 [![Typescript](https://img.shields.io/badge/Typescript-5.0+-blue)](https://www.typescriptlang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-framework-lightgrey)](https://tauri.app/)
