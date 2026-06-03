@@ -6,6 +6,7 @@
 [![Typescript](https://img.shields.io/badge/Typescript-5.0+-blue)](https://www.typescriptlang.org/)
 [![Tauri](https://img.shields.io/badge/Tauri-framework-lightgrey)](https://tauri.app/)
 [![Vite](https://img.shields.io/badge/Vite-bundler-purple)](https://vitejs.dev/)
+
 [![Download Latest Release](https://img.shields.io/badge/Download-Release-blue)](https://github.com/tlipe/steamforge/releases/latest)
 
 ---
